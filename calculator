@@ -1,0 +1,121 @@
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/num1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter First Number"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/num2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Second Number"
+        android:inputType="numberDecimal"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Addition"/>
+
+    <Button
+        android:id="@+id/btnSub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subtraction"/>
+
+    <Button
+        android:id="@+id/btnMul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Multiplication"/>
+
+    <Button
+        android:id="@+id/btnDiv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Division"/>
+
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:paddingTop="20dp"/>
+
+</LinearLayout>
+MainActivity.java
+package com.example.calculator;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText num1, num2;
+    Button btnAdd, btnSub, btnMul, btnDiv;
+    TextView txtResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        num1 = findViewById(R.id.num1);
+        num2 = findViewById(R.id.num2);
+
+        btnAdd = findViewById(R.id.btnAdd);
+        btnSub = findViewById(R.id.btnSub);
+        btnMul = findViewById(R.id.btnMul);
+        btnDiv = findViewById(R.id.btnDiv);
+
+        txtResult = findViewById(R.id.txtResult);
+
+        btnAdd.setOnClickListener(v -> {
+            double a = Double.parseDouble(num1.getText().toString());
+            double b = Double.parseDouble(num2.getText().toString());
+
+            txtResult.setText("Result = " + (a + b));
+        });
+
+        btnSub.setOnClickListener(v -> {
+            double a = Double.parseDouble(num1.getText().toString());
+            double b = Double.parseDouble(num2.getText().toString());
+
+            txtResult.setText("Result = " + (a - b));
+        });
+
+        btnMul.setOnClickListener(v -> {
+            double a = Double.parseDouble(num1.getText().toString());
+            double b = Double.parseDouble(num2.getText().toString());
+
+            txtResult.setText("Result = " + (a * b));
+        });
+
+        btnDiv.setOnClickListener(v -> {
+            double a = Double.parseDouble(num1.getText().toString());
+            double b = Double.parseDouble(num2.getText().toString());
+
+            if (b != 0) {
+                txtResult.setText("Result = " + (a / b));
+            } else {
+                txtResult.setText("Cannot divide by zero");
+            }
+        });
+    }
+}
