@@ -1,0 +1,154 @@
+Experiment 7: Menus
+Create folder
+
+Inside res, create folder:
+
+res/menu
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/contextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Long Press Me for Context Menu"
+        android:textSize="20sp"
+        android:padding="20dp"
+        android:background="#DDDDDD" />
+
+    <Button
+        android:id="@+id/btnPopup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Popup Menu" />
+
+</LinearLayout>
+res/menu/options_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/menu_help"
+        android:title="Help" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:title="About" />
+
+</menu>
+res/menu/context_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/context_copy"
+        android:title="Copy" />
+
+    <item
+        android:id="@+id/context_paste"
+        android:title="Paste" />
+
+    <item
+        android:id="@+id/context_delete"
+        android:title="Delete" />
+
+</menu>
+res/menu/popup_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_edit"
+        android:title="Edit" />
+
+    <item
+        android:id="@+id/popup_share"
+        android:title="Share" />
+
+    <item
+        android:id="@+id/popup_delete"
+        android:title="Delete" />
+
+</menu>
+MainActivity.java
+package com.example.exp7menus;
+
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView contextText;
+    Button btnPopup;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        contextText = findViewById(R.id.contextText);
+        btnPopup = findViewById(R.id.btnPopup);
+
+        registerForContextMenu(contextText);
+
+        btnPopup.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnPopup);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                Toast.makeText(MainActivity.this,
+                        "Popup Selected: " + item.getTitle(),
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            });
+
+            popupMenu.show();
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast.makeText(this,
+                "Option Selected: " + item.getTitle(),
+                Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Toast.makeText(this,
+                "Context Selected: " + item.getTitle(),
+                Toast.LENGTH_SHORT).show();
+        return true;
+    }
+}
