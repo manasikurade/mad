@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Different Layouts"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Linear Layout" />
+
+    <Button
+        android:id="@+id/btnRelative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Relative Layout" />
+
+    <Button
+        android:id="@+id/btnTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Table Layout" />
+ 
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+package com.example.exp2layout;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button btnLinear, btnRelative, btnTable;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnLinear = findViewById(R.id.btnLinear);
+        btnRelative = findViewById(R.id.btnRelative);
+        btnTable = findViewById(R.id.btnTable);
+
+        btnLinear.setOnClickListener(v ->
+                Toast.makeText(this, "Linear Layout Selected", Toast.LENGTH_SHORT).show());
+
+        btnRelative.setOnClickListener(v ->
+                Toast.makeText(this, "Relative Layout Selected", Toast.LENGTH_SHORT).show());
+
+        btnTable.setOnClickListener(v ->
+                Toast.makeText(this, "Table Layout Selected", Toast.LENGTH_SHORT).show());
+    }
+}
