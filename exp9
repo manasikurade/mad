@@ -1,0 +1,109 @@
+Experiment 9: SQLite Database
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Name" />
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Email" />
+
+        <Button
+            android:id="@+id/btnInsert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insert" />
+
+        <Button
+            android:id="@+id/btnShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Data" />
+
+        <TextView
+            android:id="@+id/txtResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingTop="15dp" />
+
+    </LinearLayout>
+</ScrollView>
+MainActivity.java
+package com.example.exp9sqlite;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText edtName, edtEmail;
+    Button btnInsert, btnShow;
+    TextView txtResult;
+    SQLiteDatabase db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        edtName = findViewById(R.id.edtName);
+        edtEmail = findViewById(R.id.edtEmail);
+        btnInsert = findViewById(R.id.btnInsert);
+        btnShow = findViewById(R.id.btnShow);
+        txtResult = findViewById(R.id.txtResult);
+
+        db = openOrCreateDatabase("StudentDB", MODE_PRIVATE, null);
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS student(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "email TEXT)");
+
+        btnInsert.setOnClickListener(v -> {
+            String name = edtName.getText().toString();
+            String email = edtEmail.getText().toString();
+
+            db.execSQL("INSERT INTO student(name, email) VALUES('" +
+                    name + "', '" + email + "')");
+
+            Toast.makeText(this, "Data Inserted Successfully", Toast.LENGTH_SHORT).show();
+
+            edtName.setText("");
+            edtEmail.setText("");
+        });
+
+        btnShow.setOnClickListener(v -> {
+            Cursor cursor = db.rawQuery("SELECT * FROM student", null);
+
+            StringBuilder data = new StringBuilder();
+
+            while (cursor.moveToNext()) {
+                data.append("ID: ").append(cursor.getInt(0)).append("\n");
+                data.append("Name: ").append(cursor.getString(1)).append("\n");
+                data.append("Email: ").append(cursor.getString(2)).append("\n\n");
+            }
+
+            txtResult.setText(data.toString());
+            cursor.close();
+        });
+    }
+}
